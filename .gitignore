@@ -1,4 +1,4 @@
 .vscode/
 build/
 dist/
-mcnn.egg-info/
+mcnnlib.egg-info/

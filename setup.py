@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 setup(
-    name='mcnnshit',
+    name='mcnnlib',
     version='1.0.0',
     description="Constrained Optimization and Manifold Optimization in Pytorch",
     author='huang chiang',
