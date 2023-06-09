@@ -18,16 +18,13 @@
 
 
 $$
-\underset{C}{\text{min}}\,\, \| B-AC\| _F \\
+\begin{equation}\label{4_opp}
+    \begin{aligned}                                                                                                                                                                                                                                                                  & \underset{\boldsymbol{C}}{\text{min}} \,\,  \left\Vert \boldsymbol{B}-\boldsymbol{A}\boldsymbol{C}\right\Vert _F \\ &{~\rm s.t.} \,\,\,\,  \boldsymbol{C}^H\boldsymbol{C}=\boldsymbol{I}.
+    \end{aligned}
+\end{equation}
 $$
 
-$$
-
-$$
-
-
-
-其中$$A, B \in \mathbb C^{m \times n}$$已知，$C \in\mathbb C^{n \times n }$为待求解参数，且满足正交约束。构建的流形神经网络仅包含一个流形全连接层，不使用偏置参数和激活函数，流形全连接层内部参数即表示$C$，使用`Complex Stiefel`流形对全连接层添加正交约束。使用$\| B-AC\| _F$作为损失函数，同时使用`ManifoldRMSprop`优化器优化网络
+其中$A,B \in\mathbb C^{m \times n}$已知，$C \in\mathbb C^{n \times n }$为待求解参数，且满足正交约束。构建的流形神经网络仅包含一个流形全连接层，不使用偏置参数和激活函数，流形全连接层内部参数即表示$C$，使用`Complex Stiefel`流形对全连接层添加正交约束。使用$\| B-AC\| _F$作为损失函数，同时使用`ManifoldRMSprop`优化器优化网络
 
 ```python
 import matplotlib.pyplot as plt
@@ -113,7 +110,7 @@ plt.show()
 `mcnn`目前支持以下空间：
 
 * `Cn(n)`: $\mathbb C^n$空间内的无约束优化空间
-* `Sphere(n)`:  $\mathbb C^n$空间内的球体， $\{x\in \mathbb C^n | \|X\|_F=1\} \subset \mathbb C^n$
+* `Sphere(n)`:  $\mathbb C^n$空间内的球体， $\{x\in \mathbb C^n | \|X\|_F=1\} \subset C^n$
 * `SO(n)`:  `n×n` 正交矩阵流形
 * `St(n,k)`:  `n×k` 列正交矩阵流形
 
