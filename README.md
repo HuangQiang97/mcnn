@@ -15,14 +15,16 @@
 流形复数神经网络框架基于`PyTorch`开发，针对网络的参数类、网络结构类和优化器类进行修改以适应流形约束。同时定义流形类，规定了各类流形的随机初始化、投影和缩放操作。
 
 使用流形全连接网络`ManifoldLinear`和流形卷积网络`ManifoldConv`模块，可以搭建自己的流形复数神经网络。由于流形复数神经网络中的重要组件继承自`PyTorch`，并封装了底层实现，使得框架的使用方式和普通神经网络框架基本一致。下面展示使用流形复数神经网络求解正交普鲁克问题：
+
+
 $$
 \begin{equation}
-    \begin{aligned}& \underset{{C}}{\text{min}} \,\,  \left\Vert {B}-{A}{C}\right\Vert _F \\ &{~\rm s.t.} \,\,\,\,  {C}^H{C}={I}.
+    \begin{aligned}& \underset{C}{\text{min}} \,\,  \left\Vert B-AC\right\Vert _F \\ &{~\rm s.t.} \,\,\,\,  C^HC=I.
     \end{aligned}
 \end{equation}
 $$
 
-其中${A},{B} \in\mathbb C^{m \times n}$已知，${C} \in\mathbb C^{n \times n }$为待求解参数，且满足正交约束。构建的流形神经网络仅包含一个流形全连接层，不使用偏置参数和激活函数，流形全连接层内部参数即表示${C}$，使用`Complex Stiefel`流形对全连接层添加正交约束。使用$\| {B}-{A}{C}\| _F$作为损失函数，同时使用`ManifoldRMSprop`优化器优化网络
+其中$A,B \in\mathbb C^{m \times n}$已知，$C \in\mathbb C^{n \times n }$为待求解参数，且满足正交约束。构建的流形神经网络仅包含一个流形全连接层，不使用偏置参数和激活函数，流形全连接层内部参数即表示$C$，使用`Complex Stiefel`流形对全连接层添加正交约束。使用$\| B-AC\| _F$作为损失函数，同时使用`ManifoldRMSprop`优化器优化网络
 
 ```python
 import matplotlib.pyplot as plt
