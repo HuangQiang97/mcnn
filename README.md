@@ -18,11 +18,16 @@
 
 
 $$
-\underset{C}{\text{min}}\,\, \| B-AC\| _F \\ 
- \rm s.t. \,\,  C^HC=I.
+\underset{C}{\text{min}}\,\, \| B-AC\| _F \\
 $$
 
-其中$$A,B \in \mathbb C^{m \times n}$$已知，$C \in\mathbb C^{n \times n }$为待求解参数，且满足正交约束。构建的流形神经网络仅包含一个流形全连接层，不使用偏置参数和激活函数，流形全连接层内部参数即表示$C$，使用`Complex Stiefel`流形对全连接层添加正交约束。使用$\| B-AC\| _F$作为损失函数，同时使用`ManifoldRMSprop`优化器优化网络
+$$
+
+$$
+
+
+
+其中$$A, B \in \mathbb C^{m \times n}$$已知，$C \in\mathbb C^{n \times n }$为待求解参数，且满足正交约束。构建的流形神经网络仅包含一个流形全连接层，不使用偏置参数和激活函数，流形全连接层内部参数即表示$C$，使用`Complex Stiefel`流形对全连接层添加正交约束。使用$\| B-AC\| _F$作为损失函数，同时使用`ManifoldRMSprop`优化器优化网络
 
 ```python
 import matplotlib.pyplot as plt
