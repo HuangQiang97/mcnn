@@ -8,9 +8,7 @@
 
 全连接网络和卷积网络的流形版本：流形全连接网络（`Manifold Linear`） 、流形卷积神经网络（`Manifold Conv`），网络内部的参数均满足特定的流形约束。同时实现了流形网络优化器：流形随机梯度下降优化器（`Manifold SGD`）、流形自适应梯度优化器（`Manifold Adagrad`）、流形均方根传播优化器（`Manifold RMSprop`）。
 
-
-
-<center><img src=".\img\arch.png" style="zoom: 45%;" /></center>
+<img src=".\img\arch.png" width = "600" alt="图片名称" align=center />
 
 流形复数神经网络框架基于`PyTorch`开发，针对网络的参数类、网络结构类和优化器类进行修改以适应流形约束。同时定义流形类，规定了各类流形的随机初始化、投影和缩放操作。
 
@@ -86,7 +84,7 @@ plt.ylabel('error')
 plt.show()
 ```
 
-<img src="img\err_plot.png" alt="err_plot" style="zoom:50%;" />
+<img src="img\err_plot.png" width = "600" alt="图片名称" align=center />
 
 ## Constraints
 
