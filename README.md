@@ -14,85 +14,79 @@
 
 流形复数神经网络框架基于`PyTorch`开发，针对网络的参数类、网络结构类和优化器类进行修改以适应流形约束。同时定义流形类，规定了各类流形的随机初始化、投影和缩放操作。
 
-使用流形全连接网络`ManifoldLinear`和流形卷积网络`ManifoldConv`模块，可以搭建自己的流形复数神经网络。由于流形复数神经网络中的重要组件继承自`PyTorch`，并封装了底层实现，使得框架的使用方式和普通神经网络框架基本一致。下面展示使用流形复数神经网络求解正交普鲁克问题：
+使用流形全连接网络`ManifoldLinear`和流形卷积网络`ManifoldConv`模块，可以搭建自己的流形复数神经网络。由于流形复数神经网络中的重要组件继承自`PyTorch`，并封装了底层实现，使得框架的使用方式和普通神经网络框架基本一致。下面展示使用流形复数神经网络计算复对称矩阵$A \in \mathbb C^{n\times n}$的最大特征值。
 
+最大特征值$\lambda$是下列优化问题的最优解：
 
 $$
-\begin{equation}
-    \begin{aligned}                                         & \underset{\boldsymbol{C}}{\text{min}} \,\,  \left\Vert \boldsymbol{B}-\boldsymbol{A}\boldsymbol{C}\right\Vert _F \\ &{~\rm s.t.} \,\,\,\,  \boldsymbol{C}^H\boldsymbol{C}=\boldsymbol{I}.
-    \end{aligned}
-\end{equation}
+\max\limits_{x\in\mathbb{C}^n, x \neq 0} \frac{x^H A x}{x^H
+            x}.
 $$
 
-其中$A$，$,B \in\mathbb C^{m \times n}$已知，$C \in\mathbb C^{n \times n }$为待求解参数，且满足正交约束。构建的流形神经网络仅包含一个流形全连接层，不使用偏置参数和激活函数，流形全连接层内部参数即表示$C$，使用`Complex Stiefel`流形对全连接层添加正交约束。使用$\| B-AC\| _F$作为损失函数，同时使用`ManifoldRMSprop`优化器优化网络
+可以重写为：
+$$
+\min\limits_{x\in\mathbb{C}^n, \|x\| = 1} -x^H A x.
+$$
+$x$的约束要求$x$满足单位`2-norm`，所以$x$是单位球空间上一点：
+$$
+\mathbb{S}^{n-1} = \{x \in \mathbb{C}^n : x^H x = 1\}.
+$$
+所以我们对$x$添加`Complex Sphere`流形约束。
 
 ```python
-import matplotlib.pyplot as plt
-import numpy as np
 import torch
-import torch.nn as nn
+from torch.linalg import eigvalsh
+from torch import nn
 import mcnn.nn as mnn
-import mcnn.optim as moptim
+import mcnn.optim as mopt
+import matplotlib.pyplot as plt
 
-# 网络模型
-class OPPNet(nn.Module):
+N = 1000  # matrix size
+LR = 1.0 / N  # step-size.
 
-    def __init__(self, m):
-        super(OPPNet, self).__init__()
-        self.c = mnn.ManifoldLinear(m, m, weight_manifold=mnn.ComplexStiefel, bias=False).to(torch.complex128).weight
+class Model(nn.Module):
+    def __init__(self, n):
+        super().__init__()
+        self.x = mnn.ManifoldLinear(1, n, weight_manifold=mnn.ComplexSphere, bias=False).to(torch.complex64).weight
 
-    def forward(self, a,b):
-        loss = torch.linalg.norm(b-a@self.c)
-        return loss
+    def forward(self, A):
+        x = self.x
+        return x.T.conj() @ A @ x
 
-n=16
-epoch=512
-err_list=np.zeros(epoch)
-err_opt=0
-repeat=32
+# Generate matrix
+A = torch.rand(N, N)+1j*torch.rand(N, N)  # Uniform on [0, 1)
+A = 0.5 * (A + A.T.conj())
 
-for _ in range(repeat):
-    
-    A = np.random.randn(n*2, n)+1j*np.random.randn(n*2, n)
-    C, _ = np.linalg.qr(np.random.randn(n, n)+1j*np.random.randn(n, n))
-    B = A@C+0.01*(np.random.randn(n*2, n)+1j*np.random.randn(n*2, n))
-    
-    # 闭式最优解
-    U, _, V_h = np.linalg.svd(B.T.conj()@A)
-    O = (U@V_h).T.conj()
-    err_opt+=np.linalg.norm(A@O-B)
+# Compare against diagonalization (eigenvalues are returend in ascending order)
+max_eigenvalue = eigvalsh(A)[-1]
+print("Max eigenvalue: {:10.5f}".format(max_eigenvalue))
 
-    A = torch.from_numpy(A)
-    B = torch.from_numpy(B)
-    C = torch.from_numpy(C)
-    
-    net = OPPNet(n)
-    optimizer = moptim.ManifoldRMSprop(net.parameters(), lr=0.01)
-    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau (optimizer, factor=0.5,patience=12, verbose=False)
-    min_loss = 1e3
-    
-    for i in range(epoch):
-        loss = net(A,B)
-        net.zero_grad()
-        loss.backward()
-        optimizer.step()
-        scheduler.step(loss)
-        if loss < min_loss:
-            min_loss = loss
-        err_list[i]+=loss.detach().numpy()
-    
-    # 列正交验证
-    w = net.c.detach()
-    assert  torch.linalg.norm(torch.eye(n)-w.T.conj()@w).item()<1e-6
+# Instantiate model and optimiser
+model = Model(N)
+optim = mopt.ConjugateGradient(model.parameters(), lr=LR)
 
+eigenvalue = float("inf")
+i = 0
+err_list = []
+while (eigenvalue - max_eigenvalue).abs() > 1e-3:
+    eigenvalue = model(A)
+    optim.zero_grad()
+    (-eigenvalue).backward()
+    optim.step()
+    print("{:2}. Best guess: {:10.5f}".format(i, eigenvalue.item()))
+    i += 1
+    err_list.append((eigenvalue - max_eigenvalue).abs().item())
+
+print("Final error {:.5f}".format((eigenvalue - max_eigenvalue).abs().item()))
 plt.figure()
-plt.plot(err_list/repeat)
-plt.plot([err_opt/repeat for _ in range(epoch)])
-plt.xlabel('update')
-plt.ylabel('err')
-plt.legend(['mcnn','opt'])
+plt.plot(err_list, marker='.')
+plt.yscale('log')
+plt.xlabel('Iteration numbers')
+plt.ylabel('error')
 plt.show()
 ```
+
+<img src="img\err_plot.png" alt="err_plot" style="zoom:50%;" />
 
 ## Constraints
 
@@ -114,7 +108,23 @@ plt.show()
 * `SO(n)`:  `n×n` 正交矩阵流形
 * `St(n,k)`:  `n×k` 列正交矩阵流形
 
+## optimizers
+
+支持的优化器：
+
+* `Conjugate Gradient`，共轭梯度优化器复球流形
+* `Manifold Adagrad`，流形自适应梯度优化器
+* `Manifold RMSprop`，流形均方根传播优化器
+* `Manifold SGD`，流形统计梯度下降优化器
+* `QManifold Adagrad`，带参数量化的流形自适应梯度优化器
+* `QManifold RMSprop`，带参数量化的流形均方根传播优化器
+
 ## Using MCNN in your Code
 
 * 安装`mcnn`:`pip install mcnnlib==1.0.0`
 
+## Reference
+
+* [manopt](https://github.com/NicolasBoumal/manopt) : a Matlab toolbox for optimization on manifolds
+* [Pymanopt](https://github.com/pymanopt/pymanopt): A Python toolbox for optimization on Riemannian manifolds with support for automatic differentiation
+* [McTorch ](https://github.com/mctorch/mctorch): a manifold optimization library for deep learning
