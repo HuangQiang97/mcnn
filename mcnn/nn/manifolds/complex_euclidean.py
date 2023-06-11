@@ -33,7 +33,9 @@ class ComplexEuclidean(Manifold):
         """
         return u
 
-    def inner(self, X, G1, G2):
+    def inner(self, X, G1, G2=None):
+        if G2 == None:
+            G2 = G1
         return torch.real(torch.sum(torch.conj(G1) * G2))
 
     def retr(self, z, v):
@@ -41,13 +43,14 @@ class ComplexEuclidean(Manifold):
         Project the points on the tangent plane back to the manifold space
         """
         return z+v
-    
+
     def egrad2rgrad(self, X, G):
         return G
-    
+
     def ehess2rhess(self, x, eg, eh, d):
         # Euclidean -> Riemannian Hessian.
         return eh
+
     def norm(self, X, G):
         return torch.norm(G)
 

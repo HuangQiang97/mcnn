@@ -8,6 +8,7 @@ class ComplexSphere(Manifold):
     Complex Sphere manifold class with internal parameters satisfying the unit F-parameter constraint: A \in \mathbb C^{m\times n},\|A\|_F=1
     For knowledge of complex spherical manifolds see: https://www.nicolasboumal.net/book/  P157
     """
+
     def __init__(self, height, width):
         super(Manifold, self).__init__()
         self._n = height
@@ -34,7 +35,9 @@ class ComplexSphere(Manifold):
         """
         return d-x*torch.real(torch.sum(torch.conj(x)*d))
 
-    def inner(self, X, G1, G2):
+    def inner(self, X, G1, G2=None):
+        if G2 == None:
+            G2 = G1
         return torch.real(torch.sum(torch.conj(G1) * G2))
 
     def retr(self, x, d):
@@ -62,6 +65,6 @@ class ComplexSphere(Manifold):
 
     def dist(self, X, Y):
         return torch.real(2*torch.asin(0.5*torch.norm(X-Y)))
-    
-    def lincomb(self, x,a1,a2):
+
+    def lincomb(self, x, a1, a2):
         return a1-a2

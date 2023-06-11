@@ -12,11 +12,12 @@ class ManifoldRMSprop(Adagrad):
     """
     Implement Manifold Adagrad algorighm
     """
+
     def __init__(self, params, lr=1e-2, lr_decay=0, weight_decay=0, initial_accumulator_value=0, eps=1e-10):
         super(ManifoldRMSprop, self).__init__(params, lr=lr, lr_decay=lr_decay,
-                                       weight_decay=weight_decay,
-                                       initial_accumulator_value=initial_accumulator_value,
-                                       eps=eps)
+                                              weight_decay=weight_decay,
+                                              initial_accumulator_value=initial_accumulator_value,
+                                              eps=eps)
 
     @torch.no_grad()
     def step(self, closure=None):
@@ -42,7 +43,9 @@ class ManifoldRMSprop(Adagrad):
 
                 state['step'] += 1
 
-                clr = group['lr'] / (1 + (state['step'] - 1) * group['lr_decay'])
+                # clr = group['lr'] / (1 + (state['step'] - 1) * group['lr_decay'])
+                clr = group['lr']
+
                 if not hasattr(p, 'manifold') or p.manifold is None:
                     if group['weight_decay'] != 0:
                         if p.grad.is_sparse:
@@ -73,9 +76,9 @@ class ManifoldRMSprop(Adagrad):
                 else:
                     if grad.is_sparse:
                         raise RuntimeError('Adagrad with manifold doesn\'t support sparse gradients')
-                    rgrad = p.rgrad.data
+                    manifold = p.manifold
+                    rgrad = manifold.egrad2rgrad(p, grad)
                     state['sum'] = beta*state['sum']+(1-beta)*(rgrad.pow(2))
-                    # state['sum'].add_(rgrad.pow(2))
                     std = state['sum'].sqrt().add_(1e-10)
                     modified_rgrad = p.manifold.proj(p.data, rgrad / std)
                     p.data.add_(p.manifold.retr(p.data, -clr * modified_rgrad) - p.data)

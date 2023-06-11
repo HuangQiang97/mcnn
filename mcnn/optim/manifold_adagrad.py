@@ -7,11 +7,12 @@ class ManifoldAdagrad(Adagrad):
     """
     Implement Manifold Adagrad algorighm
     """
+
     def __init__(self, params, lr=1e-2, lr_decay=0, weight_decay=0, initial_accumulator_value=0, eps=1e-10):
         super(ManifoldAdagrad, self).__init__(params, lr=lr, lr_decay=lr_decay,
-                                       weight_decay=weight_decay,
-                                       initial_accumulator_value=initial_accumulator_value,
-                                       eps=eps)
+                                              weight_decay=weight_decay,
+                                              initial_accumulator_value=initial_accumulator_value,
+                                              eps=eps)
 
     @torch.no_grad()
     def step(self, closure=None):
@@ -65,8 +66,8 @@ class ManifoldAdagrad(Adagrad):
                 else:
                     if grad.is_sparse:
                         raise RuntimeError('Adagrad with manifold doesn\'t support sparse gradients')
-                    rgrad = p.rgrad.data
-                    # state['sum'] = 0.9*state['sum']+0.1*(rgrad.pow(2))
+                    manifold = p.manifold
+                    rgrad = manifold.egrad2rgrad(p, grad)
                     state['sum'].add_(rgrad.pow(2))
                     std = state['sum'].sqrt().add_(1e-10)
                     modified_rgrad = p.manifold.proj(p.data, rgrad / std)

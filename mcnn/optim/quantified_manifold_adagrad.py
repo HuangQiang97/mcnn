@@ -8,11 +8,12 @@ class QManifoldAdagrad(Adagrad):
     """
     Implement Quantification Manifold Adagrad algorighm
     """
+
     def __init__(self, params, lr=1e-2, qbit=7, eta=64, lr_decay=0, weight_decay=0, initial_accumulator_value=0, eps=1e-10):
         super(QManifoldAdagrad, self).__init__(params, lr=lr, lr_decay=lr_decay,
-                                        weight_decay=weight_decay,
-                                        initial_accumulator_value=initial_accumulator_value,
-                                        eps=eps)
+                                               weight_decay=weight_decay,
+                                               initial_accumulator_value=initial_accumulator_value,
+                                               eps=eps)
         self.qbit = qbit
         self.eta = eta
         self.Q = 2**qbit
@@ -69,7 +70,8 @@ class QManifoldAdagrad(Adagrad):
                 else:
                     if grad.is_sparse:
                         raise RuntimeError('Adagrad with manifold doesn\'t support sparse gradients')
-                    rgrad = p.rgrad.data
+                    manifold = p.manifold
+                    rgrad = manifold.egrad2rgrad(p, grad)
                     state['sum'].add_(rgrad.pow(2))
                     std = state['sum'].sqrt().add_(1e-10)
                     modified_rgrad = p.manifold.proj(p.data, rgrad / std)

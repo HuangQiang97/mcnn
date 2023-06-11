@@ -35,14 +35,16 @@ class ComplexCircle(Manifold):
         """
         return u-torch.real(torch.conj(u)*z)*z
 
-    def inner(self, X, G1, G2):
+    def inner(self, X, G1, G2=None):
+        if G2 == None:
+            G2 = G1
         return torch.real(torch.sum(torch.conj(G1) * G2))
 
     def retr(self, z, v):
         """
         Project the points on the tangent plane back to the manifold space
         """
-        y=z+v
+        y = z+v
         return y/torch.abs(y)
 
     def ehess2rhess(self, z, egrad, ehess, zdot):
@@ -62,6 +64,6 @@ class ComplexCircle(Manifold):
 
     def dist(self, X, Y):
         return torch.norm(torch.real(2*torch.asin(0.5*torch.abs(X-Y))))
-    
-    def lincomb(self, x,a1,a2):
+
+    def lincomb(self, x, a1, a2):
         return a1-a2

@@ -56,7 +56,9 @@ class ComplexStiefel(Manifold):
         """
         return U - multiprod(X, multiherm(multiprod(multihconj(X), U)))
 
-    def inner(self, X, G1, G2):
+    def inner(self, X, G1, G2=None):
+        if G2 == None:
+            G2 = G1
         return torch.real(torch.sum(torch.conj(G1) * G2))
 
     def retr(self, X, G):

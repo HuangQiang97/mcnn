@@ -38,7 +38,7 @@ print("Max eigenvalue: {:10.5f}".format(max_eigenvalue))
 
 # Instantiate model and optimiser
 model = Model(N)
-optim = mopt.ConjugateGradient(model.parameters(), lr=LR)
+optim = mopt.ManifoldSGD(model.parameters(), lr=LR)
 
 eigenvalue = float("inf")
 i = 0
@@ -51,6 +51,7 @@ while (eigenvalue - max_eigenvalue).abs() > 1e-3:
     print("{:2}. Best guess: {:10.5f}".format(i, eigenvalue.item()))
     i += 1
     err_list.append((eigenvalue - max_eigenvalue).abs().item())
+
 
 print("Final error {:.5f}".format((eigenvalue - max_eigenvalue).abs().item()))
 plt.figure()

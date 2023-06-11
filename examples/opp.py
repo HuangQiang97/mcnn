@@ -9,8 +9,6 @@ import torch.nn as nn
 import mcnn.nn as mnn
 import mcnn.optim as moptim
 
-# Module
-
 
 class OPPNet(nn.Module):
 
@@ -45,7 +43,7 @@ for _ in range(repeat):
     C = torch.from_numpy(C)
 
     net = OPPNet(n)
-    optimizer = moptim.ManifoldRMSprop(net.parameters(), lr=0.01)
+    optimizer = moptim.ManifoldAdam(net.parameters(), lr=0.1)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.5, patience=12, verbose=False)
     min_loss = 1e3
 

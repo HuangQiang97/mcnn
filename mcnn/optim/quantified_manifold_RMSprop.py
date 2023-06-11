@@ -13,11 +13,12 @@ class QManifoldRMSprop(Adagrad):
     """
     Implement Quantification Manifold RMSprop algorighm
     """
+
     def __init__(self, params, lr=1e-2, qbit=8, eta=0, lr_decay=0, weight_decay=0, initial_accumulator_value=0, eps=1e-10):
         super(QManifoldRMSprop, self).__init__(params, lr=lr, lr_decay=lr_decay,
-                                        weight_decay=weight_decay,
-                                        initial_accumulator_value=initial_accumulator_value,
-                                        eps=eps)
+                                               weight_decay=weight_decay,
+                                               initial_accumulator_value=initial_accumulator_value,
+                                               eps=eps)
         self.Q = 2**qbit
 
     @torch.no_grad()
@@ -75,12 +76,11 @@ class QManifoldRMSprop(Adagrad):
                 else:
                     if grad.is_sparse:
                         raise RuntimeError('Adagrad with manifold doesn\'t support sparse gradients')
-                    rgrad = p.rgrad.data
+                    manifold = p.manifold
+                    rgrad = manifold.egrad2rgrad(p, grad)
                     state['sum'] = beta*state['sum']+(1-beta)*(rgrad.pow(2))
-                    # state['sum'].add_(rgrad.pow(2))
                     std = state['sum'].sqrt().add_(1e-10)
                     modified_rgrad = p.manifold.proj(p.data, rgrad / std)
-
                     nextpoint = p.manifold.retr(p.data, -clr * modified_rgrad)
                     Q_nextpoint = torch.exp(1j * self.q_theta(torch.angle(nextpoint)))
                     p.data.add_(Q_nextpoint - p.data)

@@ -4,3 +4,4 @@ from .conjugate_gradient import ConjugateGradient
 from .quantified_manifold_adagrad import QManifoldAdagrad
 from .manifold_RMSprop import ManifoldRMSprop
 from .quantified_manifold_RMSprop import QManifoldRMSprop
+from .manifold_adam import ManifoldAdam
