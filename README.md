@@ -120,7 +120,7 @@ plt.show()
 
 ## Using MCNN in your Code
 
-* 安装`mcnn`:`pip install mcnnlib==1.0.0`
+* 安装`mcnn`:`pip install mcnnlib==1.0.1`
 
 ## Reference
 
