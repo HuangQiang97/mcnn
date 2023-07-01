@@ -21,7 +21,7 @@ class OPPNet(nn.Module):
         return loss
 
 
-n = 8
+n = 4
 epoch = 512
 err_list = np.zeros(epoch)
 err_opt = 0

@@ -41,4 +41,5 @@ class ManifoldLinear(torch.nn.Linear):
 
 
     def forward(self, input):
+        
         return F.linear(input, self.weight_transform(self.weight), self.bias)

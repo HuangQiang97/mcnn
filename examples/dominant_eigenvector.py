@@ -13,7 +13,7 @@ import mcnn.optim as mopt
 import matplotlib.pyplot as plt
 
 
-N = 1000  # matrix size
+N = 4096  # matrix size
 LR = 1.0 / N  # step-size.
 
 
@@ -38,7 +38,7 @@ print("Max eigenvalue: {:10.5f}".format(max_eigenvalue))
 
 # Instantiate model and optimiser
 model = Model(N)
-optim = mopt.ManifoldSGD(model.parameters(), lr=LR)
+optim = mopt.ConjugateGradient(model.parameters(), lr=LR)
 
 eigenvalue = float("inf")
 i = 0

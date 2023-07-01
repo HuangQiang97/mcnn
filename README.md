@@ -110,7 +110,7 @@ plt.show()
 
 支持的优化器：
 
-* `Conjugate Gradient`，共轭梯度优化器复球流形
+* `Conjugate Gradient`，共轭梯度优化器
 * `Manifold Adam`，流形自适应动量估计算法优化器
 * `Manifold Adagrad`，流形自适应梯度优化器
 * `Manifold RMSprop`，流形均方根传播优化器
