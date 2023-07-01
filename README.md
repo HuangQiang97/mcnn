@@ -22,13 +22,17 @@ $$
 $$
 
 可以重写为：
+
 $$
 \min\limits_{x\in\mathbb{C}^n, \|x\| = 1} -x^H A x.
 $$
+
 $x$的约束要求$x$满足单位`2-norm`，所以$x$是单位球空间上一点：
+
 $$
 \mathbb{S}^{n-1} = \{x \in \mathbb{C}^n : x^H x = 1\}.
 $$
+
 所以我们对$x$添加`Complex Sphere`流形约束。
 
 ```python
