@@ -6,7 +6,7 @@
 
 `Manifold Constrained Neural Network(MCNN)`为在`PyTorch`中进行f复数约束性优化和流形优化提供了一种简单的方法。无需任何模板，提供开箱即用的优化器、网络层和网络模型，训练代码中没有。只需在构建模型时声明约束条件，即可开始使用。
 
-全连接网络和卷积网络的流形版本：流形全连接网络（`Manifold Linear`） 、流形卷积神经网络（`Manifold Conv`），网络内部的参数均满足特定的流形约束。同时实现了流形网络优化器：流形随机梯度下降优化器（`Manifold SGD`）、流形自适应梯度优化器（`Manifold Adagrad`）、流形均方根传播优化器（`Manifold RMSprop`）。
+全连接网络和卷积网络的流形版本：流形全连接网络（`Manifold Linear`） 、流形卷积神经网络（`Manifold Conv`）、流形循环神经网络(`Manifold RNN`)，网络内部的参数均满足特定的流形约束。同时实现了流形网络优化器：流形随机梯度下降优化器（`Manifold SGD`）、流形自适应梯度优化器（`Manifold Adagrad`）、流形均方根传播优化器（`Manifold RMSprop`）、流形自适应动量估计算法优化器（`Manifold Adam`）。
 
 <center><img src=".\img\arch.png" width = "600" alt="图片名称" align=center /></center>
 
@@ -90,10 +90,10 @@ plt.show()
 
 支持的流形约束：
 
-* `Complex Sphere`，复球流形，满足约束：$ X \in \mathbb C^{m\times n},\| X\|_F=1$
-* `Complex Stiefel`，复Stiefel流形，满足约束：$ X \in \mathbb C^{m\times n},{X}^H{X}={I}$
-* `Complex Circle`，复单位圆流形，满足约束：$ X \in \mathbb C^{m\times n},|[{X}]_{i,j}|=1$
-* `Complex Euclid`，复欧几里得流形，满足约束：$ X \in \mathbb C^{m\times n}$
+* `Complex Sphere`，复球流形，满足约束：$X \in \mathbb C^{m \times n},\| X \|_F=1$
+* `Complex Stiefel`，复Stiefel流形，满足约束：$X \in \mathbb C^{m\times n},{X}^H{X}={I}$
+* `Complex Circle`，复单位圆流形，满足约束：$X \in \mathbb C^{m\times n},|[{X}]_{i,j}|=1$
+* `Complex Euclid`，复欧几里得流形，满足约束：$X \in \mathbb C^{m\times n}$
 
 ## Supported Spaces
 
@@ -102,7 +102,7 @@ plt.show()
 `mcnn`目前支持以下空间：
 
 * `Cn(n)`: $\mathbb C^n$空间内的无约束优化空间
-* `Sphere(n)`:  $\mathbb C^n$空间内的球体， $\{x\in \mathbb C^n | \|X\|_F=1\} \subset C^n$
+* `Sphere(n)`:  $\mathbb C^n$空间内的球体， $\{x\in \mathbb C^n , \|X\|_F=1\} \subset C^n$
 * `SO(n)`:  `n×n` 正交矩阵流形
 * `St(n,k)`:  `n×k` 列正交矩阵流形
 
