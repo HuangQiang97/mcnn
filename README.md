@@ -131,3 +131,4 @@ plt.show()
 * [manopt](https://github.com/NicolasBoumal/manopt) : a Matlab toolbox for optimization on manifolds
 * [Pymanopt](https://github.com/pymanopt/pymanopt): A Python toolbox for optimization on Riemannian manifolds with support for automatic differentiation
 * [McTorch ](https://github.com/mctorch/mctorch): a manifold optimization library for deep learning
+* [An introduction to optimization on smooth manifolds](https://www.nicolasboumal.net/#book):An introduction to optimization on smooth manifolds
