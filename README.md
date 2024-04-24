@@ -99,6 +99,23 @@ plt.show()
 * `Complex Circle`，复单位圆流形，满足约束：$X \in \mathbb C^{m\times n},|[{X}]_{i,j}|=1$ 
 * `Complex Euclid`，复欧几里得流形，满足约束：$X \in \mathbb C^{m\times n}$ 
 
+* `Complex Sphere`，复球流形，满足约束：
+    $$
+    X \in  \mathbb C^{m \times n}, \| X \|_F=1
+    $$
+* `Complex Stiefel`，复Stiefel流形，满足约束：
+    $$
+    X \in \mathbb C^{m\times n},{X}^H{X}={I}
+    $$
+* `Complex Circle`，复单位圆流形，满足约束：
+    $$
+    X \in \mathbb C^{m\times n},|[{X}]_{i,j}|=1
+    $$
+* `Complex Euclid`，复欧几里得流形，满足约束：
+    $$
+    X \in \mathbb C^{m\times n}
+    $$
+
 ## Supported Spaces
 
 `mcnn`中的每个约束条件都是以流形的形式实现，这使用户在选择每个参数化的选项时有更大的灵活性。所有流形都支持黎曼梯度下降法，同样也支持其他`PyTorch`优化器。
