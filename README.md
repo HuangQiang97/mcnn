@@ -14,7 +14,7 @@
 
 使用流形全连接网络`ManifoldLinear`和流形卷积网络`ManifoldConv`模块，可以搭建自己的流形复数神经网络。由于流形复数神经网络中的重要组件继承自`PyTorch`，并封装了底层实现，使得框架的使用方式和普通神经网络框架基本一致。下面展示使用流形复数神经网络计算复对称矩阵 $A \in \mathbb C^{n\times n}$ 的最大特征值。
 
-最大特征值$ \lambda $是下列优化问题的最优解：
+最大特征值 $\lambda$ 是下列优化问题的最优解：
 
 $$
 \max\limits_{x\in\mathbb{C}^n, x \neq 0} \frac{x^H A x}{x^H
@@ -27,7 +27,7 @@ $$
 \min\limits_{x\in\mathbb{C}^n, \|x\| = 1} -x^H A x.
 $$
 
-$x$的约束要求$x$满足单位`2-norm`，所以 $x$ 是单位球空间上一点：
+$x$的约束要求 $x$ 满足单位`2-norm`，所以 $x$ 是单位球空间上一点：
 
 $$
 \mathbb{S}^{n-1} = \{x \in \mathbb{C}^n : x^H x = 1\}.
@@ -94,10 +94,10 @@ plt.show()
 
 支持的流形约束：
 
-* `Complex Sphere`，复球流形，满足约束：$X \in \mathbb C^{m \times n},\| X \|_F=1$
-* `Complex Stiefel`，复Stiefel流形，满足约束：$X \in \mathbb C^{m\times n},{X}^H{X}={I}$
-* `Complex Circle`，复单位圆流形，满足约束：$X \in \mathbb C^{m\times n},|[{X}]_{i,j}|=1$
-* `Complex Euclid`，复欧几里得流形，满足约束：$X \in \mathbb C^{m\times n}$
+* `Complex Sphere`，复球流形，满足约束：$X \in \mathbb C^{m \times n},\| X \|_F=1$ 
+* `Complex Stiefel`，复Stiefel流形，满足约束：$X \in \mathbb C^{m\times n},{X}^H{X}={I}$ 
+* `Complex Circle`，复单位圆流形，满足约束：$X \in \mathbb C^{m\times n},|[{X}]_{i,j}|=1$ 
+* `Complex Euclid`，复欧几里得流形，满足约束：$X \in \mathbb C^{m\times n}$ 
 
 ## Supported Spaces
 
