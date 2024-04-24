@@ -106,7 +106,7 @@ plt.show()
 `mcnn`目前支持以下空间：
 
 * `Cn(n)`: $\mathbb C^n$空间内的无约束优化空间
-* `Sphere(n)`:  $\mathbb C^n$空间内的球体， $\{x\in \mathbb C^n , \|X\|_F=1\} \subset C^n$
+* `Sphere(n)`:  $\mathbb C^n$空间内的球体
 * `SO(n)`:  `n×n` 正交矩阵流形
 * `St(n,k)`:  `n×k` 列正交矩阵流形
 
