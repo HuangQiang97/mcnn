@@ -97,7 +97,7 @@ plt.show()
 * `Complex Sphere`，复球流形，满足约束： $X \in \mathbb C^{m \times n}, \| X \|_F=1$ 
 * `Complex Stiefel`，复Stiefel流形，满足约束： $X \in \mathbb C^{m\times n},{X}^H{X}={I}$ 
 * `Complex Circle`，复单位圆流形，满足约束： $X \in \mathbb C^{m\times n},|[{X}]_{i,j}|=1$ 
-* `Complex Euclid`，复欧几里得流形，满足约束： $ X \in \mathbb C^{m\times n}$ 
+* `Complex Euclid`，复欧几里得流形，满足约束： $X \in \mathbb C^{m\times n}$ 
 
 ## Supported Spaces
 
