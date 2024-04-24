@@ -4,7 +4,7 @@
 
 ## Overview
 
-`Manifold Constrained Neural Network(MCNN)`为在`PyTorch`中进行f复数约束性优化和流形优化提供了一种简单的方法。无需任何模板，提供开箱即用的优化器、网络层和网络模型，训练代码中没有。只需在构建模型时声明约束条件，即可开始使用。
+`Manifold Constrained Neural Network(MCNN)`为在`PyTorch`中进行复数约束性优化和流形优化提供了一种简单的方法。无需任何模板，提供开箱即用的优化器、网络层和网络模型，训练代码中没有。只需在构建模型时声明约束条件，即可开始使用。
 
 全连接网络和卷积网络的流形版本：流形全连接网络（`Manifold Linear`） 、流形卷积神经网络（`Manifold Conv`）、流形循环神经网络(`Manifold RNN`)，网络内部的参数均满足特定的流形约束。同时实现了流形网络优化器：流形随机梯度下降优化器（`Manifold SGD`）、流形自适应梯度优化器（`Manifold Adagrad`）、流形均方根传播优化器（`Manifold RMSprop`）、流形自适应动量估计算法优化器（`Manifold Adam`）。
 
@@ -14,7 +14,7 @@
 
 使用流形全连接网络`ManifoldLinear`和流形卷积网络`ManifoldConv`模块，可以搭建自己的流形复数神经网络。由于流形复数神经网络中的重要组件继承自`PyTorch`，并封装了底层实现，使得框架的使用方式和普通神经网络框架基本一致。下面展示使用流形复数神经网络计算复对称矩阵 $A \in \mathbb C^{n\times n}$ 的最大特征值。
 
-最大特征值$\lambda$是下列优化问题的最优解：
+最大特征值$ \lambda $是下列优化问题的最优解：
 
 $$
 \max\limits_{x\in\mathbb{C}^n, x \neq 0} \frac{x^H A x}{x^H
@@ -27,7 +27,7 @@ $$
 \min\limits_{x\in\mathbb{C}^n, \|x\| = 1} -x^H A x.
 $$
 
-$x$的约束要求$x$满足单位`2-norm`，所以$x$是单位球空间上一点：
+$x$的约束要求$x$满足单位`2-norm`，所以$ x $是单位球空间上一点：
 
 $$
 \mathbb{S}^{n-1} = \{x \in \mathbb{C}^n : x^H x = 1\}.
