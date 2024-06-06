@@ -112,9 +112,17 @@ plt.show()
 * `SO(n)`:  `n×n` 正交矩阵流形
 * `St(n,k)`:  `n×k` 列正交矩阵流形
 
+## Supported Modules
+
+`mcnn`目前支持以网络类型：
+
+* `Linear`全连接网络层
+* `Conv2d, Conv3d`二维及三维卷积层
+* `RNN`循环神经网络层
+
 ## optimizers
 
-支持的优化器：
+`mcnn`目前支持以下优化器：
 
 * `Conjugate Gradient`，共轭梯度优化器
 * `Manifold Adam`，流形自适应动量估计算法优化器
